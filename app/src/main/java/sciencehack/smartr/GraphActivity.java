@@ -7,12 +7,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class GraphActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+
+        final MyFitnessPalService myFitnessPalService = ((MyApplication)this.getApplication()).getMyFitnessPalService();
+
+        final GraphView graph = (GraphView) findViewById(R.id.graph);
 
         final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
         if (checkBox.isChecked()) {
@@ -39,6 +50,17 @@ public class GraphActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //TODO:SHOW
+                        List<DataPointDto> data = myFitnessPalService.getCalories(30).getData();
+
+                        List<DataPoint> listPoint = new ArrayList<DataPoint>();
+                        int i =0;
+                        for(DataPointDto point:data){
+                            listPoint.add(new DataPoint(i,point.getTotal()));
+                            i++;
+                        }
+                        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(listPoint.toArray());
+                        graph.addSeries(series);
+
                     }
                 }
         );
