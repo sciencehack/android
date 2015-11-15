@@ -58,7 +58,8 @@ public class GraphActivity extends AppCompatActivity {
                             listPoint.add(new DataPoint(i,point.getTotal()));
                             i++;
                         }
-                        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(listPoint.toArray());
+                        DataPoint[] points = (DataPoint[]) listPoint.toArray();
+                        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
                         graph.addSeries(series);
 
                     }
@@ -69,6 +70,18 @@ public class GraphActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         //TODO:SHOW
+
+                        List<DataPointDto> data = myFitnessPalService.getKilojoulesBurned(30).getData();
+
+                        List<DataPoint> listPoint = new ArrayList<DataPoint>();
+                        int i =0;
+                        for(DataPointDto point:data){
+                            listPoint.add(new DataPoint(i,point.getTotal()));
+                            i++;
+                        }
+                        DataPoint[] points = (DataPoint[]) listPoint.toArray();
+                        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(points);
+                        graph.addSeries(series);
                     }
                 }
         );
